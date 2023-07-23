@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { matchedData } from 'express-validator';
+import { request } from 'http';
 import prisma from '../modules/db';
 import { MatchedUpdateInfo } from '../types/custom';
 
@@ -75,4 +76,43 @@ export const createUpdate = async (req: Request, res: Response) => {
 
     res.json({ data: update });
   }
+}
+
+// Update product update
+export const updateUpdate = async (req: Request, res: Response) => {
+  if(!req.user)  return res.status(401).json({ data: [], message: "Not Authorized!"});
+  
+  const productUpdate = await prisma.product.findFirst({
+    where: {
+      belongsToId: req.user.id,
+    },
+    select: {
+      name: true,
+      updates: {
+        where: {
+          id: req.params.id
+        }
+      }
+    }
+  });
+
+  if(!productUpdate?.updates) {
+    return res.json({ data: [], message: "Invalid product update"});
+  }
+
+  const updatedUpdate = await prisma.update.update({
+    where: {
+      id: req.params.id
+    },
+    data: req.body
+  });
+
+  return res.json({ data: updatedUpdate });
+}
+
+// Delete product update
+export const deleteUpdate = async (req: Request, res: Response) => {
+  if(!req.user) return res.status(401).json({ data: [], message: "Not Authorized!"});
+
+  
 }
