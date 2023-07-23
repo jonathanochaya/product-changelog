@@ -5,10 +5,13 @@ import { comparePassword, createJWT, hashPassword } from "../modules/auth";
 
 export const createNewUser = async (req: Request, res: Response) => {
 
+  const { username, password }: 
+    { username: string; password: string} = req.body;
+
   const user = await prisma.user.create({
     data: {
-      username: req.body.username,
-      password: await hashPassword(req.body.password)
+      username: username,
+      password: await hashPassword(password)
     }
   });
 
@@ -19,16 +22,19 @@ export const createNewUser = async (req: Request, res: Response) => {
 
 
 export const signIn = async (req: Request, res: Response) => {
+  const { username }: { username: string } = req.body;
 
   const user = await prisma.user.findUnique({
     where: {
-      username: req.body.username
+      username: username
     }
   });
 
 
   if(user) {
-    const isValid = await comparePassword(req.body.password, user.password)
+    const { password }: { password: string } = req.body;
+
+    const isValid = await comparePassword(password, user.password)
   
     if(!isValid) {
       res.status(401).json({ message: 'Invalid Username or Password' });

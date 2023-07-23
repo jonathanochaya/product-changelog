@@ -1,10 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
+import { UserInfo, UserInfoJWT } from '../types/custom';
 
 const secret = process.env.JWT_SECRET || '';
 
-export const createJWT = (user: { id: String, username: String}) => {
+export const createJWT = (user: UserInfo) => {
   const token = jwt.sign({
     id: user.id,
     username:  user.username
@@ -31,7 +32,9 @@ export const protect = (req: Request, res: Response, next: NextFunction) => {
   }
 
   try {
-    const user = jwt.verify(token, secret);
+    // const { id, username }: UserInfo = jwt.verify(token, secret);
+    const user: UserInfo =  <UserInfoJWT>jwt.verify(token, secret);
+    
     req.user = user;
     next();
   } catch (e) {
