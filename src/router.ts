@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { createProduct, deleteProduct, getProduct, getProducts, updateProduct } from './handlers/products';
-import { handleInputErrors, validateBodyField, validateDescriptionField, validateNameField, validateOptionalBodyField, validateOptionalDescriptionField, validateOptionalNameField, validateOptionalTitleField, validateOptionalVersionField, validateStatusField, validateTitleField, validateUpdateIdField, validateVersionField } from './modules/middleware';
+import { getUpdates } from './handlers/update';
+import { handleInputErrors, validateBodyField, validateDescriptionField, validateNameField, validateOptionalBodyField, validateOptionalDescriptionField, validateOptionalNameField, validateOptionalTitleField, validateOptionalVersionField, validateProductIdField, validateStatusField, validateTitleField, validateUpdateIdField, validateVersionField } from './modules/middleware';
 
 
 const router = Router();
@@ -27,13 +28,13 @@ router.delete('/product/:id', deleteProduct);
 /**
  * Update
  */
-router.get('/update', (req, res) => {
-
-})
+/* Get updates by user */
+router.get('/update', getUpdates);
 
 router.post('/update', 
   validateTitleField(), 
   validateBodyField(),
+  validateProductIdField(),
   (req, res) => {
 
 });

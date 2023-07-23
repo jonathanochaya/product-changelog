@@ -5,5 +5,10 @@ export interface UserInfo {
   username: string
 }
 
-
 export interface UserInfoJWT extends JwtPayload, UserInfo {};
+
+export type MatchedUpdateInfo = {
+  title: string;
+  body: string;
+  productId: string;
+}

@@ -21,6 +21,7 @@ export const validateStatusField = () => body('status').isIn(['IN_PROGRESS', 'SH
 export const validateVersionField = () => body('version').notEmpty().escape();
 export const validateDescriptionField = () => body('description').notEmpty().escape();
 export const validateUpdateIdField = () => body('updateId').notEmpty().isString().escape();
+export const validateProductIdField = () => body('productId').notEmpty().isString().escape();
 
 // optional fields
 export const validateOptionalNameField = () => body('name').optional().escape();
