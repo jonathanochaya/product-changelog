@@ -1,13 +1,13 @@
 import { Router } from 'express';
 
-const router = Router();
 
+const router = Router();
 
 /**
  * Product
  */
 router.get('/product', (req, res) => {
-  res.end('linked');
+  res.json({'message': 'works'})
 })
 
 router.post('/product', (req, res) => {
@@ -54,7 +54,7 @@ router.delete('/update/:id', (req, res) => {
 /**
  * Update Point
  */
- router.get('/updatepoint', (req, res) => {
+router.get('/updatepoint', (req, res) => {
 
 })
 
