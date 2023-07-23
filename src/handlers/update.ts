@@ -4,8 +4,9 @@ import { request } from 'http';
 import prisma from '../modules/db';
 import { MatchedUpdateInfo } from '../types/custom';
 
+
 // Get all product updates 
-export const getUpdates = async (req: Request, res: Response) => {
+export const getProductUpdates = async (req: Request, res: Response) => {
   if(!req.user) return res.status(401).json({ data: [], message: "Not Authorized!"});
 
   const products = await prisma.product.findMany({
@@ -29,8 +30,9 @@ export const getUpdates = async (req: Request, res: Response) => {
   return res.json({ data: products })
 }
 
+
 // Get single product update by it's id
-export const getUpdate = async (req: Request, res: Response) => {
+export const getProductUpdate = async (req: Request, res: Response) => {
   if(!req.user) return res.status(401).json({ data: [], message: "Not Authorized!" });
 
   const update = await prisma.update.findFirst({
@@ -45,8 +47,9 @@ export const getUpdate = async (req: Request, res: Response) => {
     res.json({ data: null });
 }
 
+
 // Create product update
-export const createUpdate = async (req: Request, res: Response) => {
+export const createProductUpdate = async (req: Request, res: Response) => {
   if(!req.user) return res.status(401).json({ data: [], message: "Not Authorized"});
 
   /* check product exists */
@@ -78,10 +81,12 @@ export const createUpdate = async (req: Request, res: Response) => {
   }
 }
 
+
 // Update product update
-export const updateUpdate = async (req: Request, res: Response) => {
+export const updateProductUpdate = async (req: Request, res: Response) => {
   if(!req.user)  return res.status(401).json({ data: [], message: "Not Authorized!"});
   
+  // Find products with an update with id
   const productUpdate = await prisma.product.findFirst({
     where: {
       belongsToId: req.user.id,
@@ -96,7 +101,8 @@ export const updateUpdate = async (req: Request, res: Response) => {
     }
   });
 
-  if(!productUpdate?.updates) {
+  // if we don't update any updates that match submited query
+  if(!productUpdate?.updates.length) {
     return res.json({ data: [], message: "Invalid product update"});
   }
 
@@ -110,9 +116,36 @@ export const updateUpdate = async (req: Request, res: Response) => {
   return res.json({ data: updatedUpdate });
 }
 
+
 // Delete product update
-export const deleteUpdate = async (req: Request, res: Response) => {
+export const deleteProductUpdate = async (req: Request, res: Response) => {
   if(!req.user) return res.status(401).json({ data: [], message: "Not Authorized!"});
 
-  
+  // Find products with an update with id
+  const productUpdate = await prisma.product.findFirst({
+    where: {
+      belongsToId: req.user.id,
+    },
+    select: {
+      name: true,
+      updates: {
+        where: {
+          id: req.params.id
+        }
+      }
+    }
+  });
+
+  // if we don't update any updates that match submited query
+  if(!productUpdate?.updates.length) {
+    return res.json({ data: [], message: "Invalid product update"});
+  }
+
+  const deletedUpdate = await prisma.update.delete({
+    where: {
+      id: req.params.id
+    }
+  });
+
+  res.json({ data: deletedUpdate });
 }
