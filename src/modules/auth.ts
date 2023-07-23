@@ -42,10 +42,10 @@ export const protect = (req: Request, res: Response, next: NextFunction) => {
   }
 }
 
-const comparePassword = async (password: string | Buffer, hash: string) => {
-  return await bcrypt.compare(password, hash);
+export const comparePassword = (password: string | Buffer, hash: string) => {
+  return bcrypt.compare(password, hash);
 }
 
-const hashPassword = (password: string | Buffer) => {
+export const hashPassword = (password: string | Buffer) => {
   return bcrypt.hash(password, 10);
 }
