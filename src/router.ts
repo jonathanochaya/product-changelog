@@ -1,6 +1,5 @@
 import { Router } from 'express';
-import { body } from 'express-validator';
-import { matchedData } from 'express-validator';
+import { createProduct, deleteProduct, getProduct, getProducts, updateProduct } from './handlers/products';
 import { handleInputErrors, validateBodyField, validateDescriptionField, validateNameField, validateOptionalBodyField, validateOptionalDescriptionField, validateOptionalNameField, validateOptionalTitleField, validateOptionalVersionField, validateStatusField, validateTitleField, validateUpdateIdField, validateVersionField } from './modules/middleware';
 
 
@@ -9,31 +8,20 @@ const router = Router();
 /**
  * Product
  */
-router.get('/product', (req, res) => {
-  res.json({'message': 'works'})
-})
+/* Get all products by user */
+router.get('/product', getProducts);
 
-router.post('/product', validateNameField(), handleInputErrors, (req, res) => {
-  
-})
+/* Create new product */
+router.post('/product', validateNameField(), handleInputErrors, createProduct)
 
-router.get('/product/:id', (req, res) => {
-  
-})
+/* Get product by id */
+router.get('/product/:id', getProduct);
 
-router.put('/product/:id', 
-  validateNameField(), 
-  handleInputErrors, 
-  (req, res) => {
+/* Update product by id */
+router.put('/product/:id', validateNameField(), handleInputErrors, updateProduct);
 
-    const data = matchedData(req);
-
-    res.json({ message: "works" });
-});
-
-router.delete('/product/:id', (req, res) => {
-  
-})
+/* Delete product by id */
+router.delete('/product/:id', deleteProduct);
 
 
 /**
