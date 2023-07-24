@@ -2,6 +2,7 @@ import express, { NextFunction, Request, Response } from "express";
 import morgan from 'morgan';
 import { createNewUser, signIn } from "./handlers/user";
 import { protect } from "./modules/auth";
+import { defaultErrorBoundary } from "./modules/middleware";
 import router from './router';
 import { AllErrorHandler } from "./types/custom";
 
@@ -20,10 +21,7 @@ app.post('/user', createNewUser);
 app.post('/signin', signIn)
 
 /* default error handler */
-app.use((err: AllErrorHandler, req: Request, res: Response, next: NextFunction) => {
-  console.error(`Path: ${req.path}, Error: ${err.name}, Message: ${err.message}`);
-  next();
-});
+app.use(defaultErrorBoundary);
 
 
 export default app;

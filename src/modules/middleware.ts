@@ -1,13 +1,13 @@
 import { NextFunction, Request, Response } from 'express';
-import { body, oneOf, validationResult as validate } from 'express-validator';
+import { body, validationResult as validate } from 'express-validator';
+import { AllErrorHandler } from '../types/custom';
 
 
 export const handleInputErrors = (req: Request, res: Response, next: NextFunction) => {
   const errors = validate(req);
 
   if(!errors.isEmpty()) {
-    res.status(400).json({ errors: errors.array() });
-    return;
+    return res.status(400).json({ errors: errors.array() });
   } else {
     next();
   }
@@ -30,3 +30,9 @@ export const validateOptionalBodyField = () => body('body').optional().escape();
 export const validateOptionalStatusField = () => body('status').isIn(['IN_PROGRESS', 'SHIPPED', 'DEPRECATED']);
 export const validateOptionalVersionField = () => body('version').optional().escape();
 export const validateOptionalDescriptionField = () => body('description').optional().escape();
+
+// error boundary
+export const defaultErrorBoundary = (err: AllErrorHandler, req: Request, res: Response, next: NextFunction) => {
+  console.error(`Path: ${req.path}, Error: ${err.name}, Message: ${err.message}`);
+  next();
+}

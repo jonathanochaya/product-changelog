@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { createProduct, deleteProduct, getProduct, getProducts, updateProduct } from './handlers/products';
 import { createProductUpdate, deleteProductUpdate, getProductUpdate, getProductUpdates, updateProductUpdate } from './handlers/update';
-import { handleInputErrors, validateBodyField, validateDescriptionField, validateNameField, validateOptionalBodyField, validateOptionalDescriptionField, validateOptionalNameField, validateOptionalTitleField, validateOptionalVersionField, validateProductIdField, validateStatusField, validateTitleField, validateUpdateIdField, validateVersionField } from './modules/middleware';
+import { defaultErrorBoundary, handleInputErrors, validateBodyField, validateDescriptionField, validateNameField, validateOptionalBodyField, validateOptionalDescriptionField, validateOptionalNameField, validateOptionalTitleField, validateOptionalVersionField, validateProductIdField, validateStatusField, validateTitleField, validateUpdateIdField, validateVersionField } from './modules/middleware';
 
 
 const router = Router();
@@ -82,5 +82,8 @@ router.put('/updatepoint/:id',
 router.delete('/updatepoint/:id', (req, res) => {
   
 })
+
+/* If an unhandled error occurs handle here */
+router.use(defaultErrorBoundary);
 
 export default router;
